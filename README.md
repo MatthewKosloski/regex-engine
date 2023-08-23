@@ -6,4 +6,4 @@ A program that, given a regular expression `a`, constructs a finite state machin
 
 2. **_Todo_** Using the subset construction algorithm, implement `nfaToDFA()` to construct a deterministic finite state machine from a given non-deterministic finite state machine.
 
-3. **_Todo_** Using _some algorithm_, minimize the DFA outputted from `nfaToDFA()` such that the resulting DFA has a minimum number of states, which consequently minimizes computation cost.
+3. **_Todo_** Using Moore's algorithm, minimize the DFA outputted from `nfaToDFA()` such that the resulting DFA has a minimum number of states, which consequently minimizes computation cost.
