@@ -57,10 +57,11 @@ class Digraph {
     }
 
     /**
-     * Returns vertices such that each vertex has an edge coming to it from the provided vertex.
+     * Returns vertices such that each vertex has an edge going to it from the provided vertex.
      * 
-     * @param {number} vertex The neighboring vertex.
-     * @returns {number[]} The vertices that neighbor the provided vertex.
+     * @param {number} vertex A vertex.
+     * @returns {number[]} The vertices that neighbor the given vertex. That is, those vertices that
+     * have edges going to it from the given vertex.
      */
     getNeighbors(vertex) {
         this.validateVertices(vertex);
