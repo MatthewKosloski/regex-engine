@@ -39,21 +39,6 @@ class NFA extends LabeledDigraph {
 
         return this;
     }
-
-    /**
-     * Simulates the string on the NFA.
-     * 
-     * @param {string} str An input string.
-     * @return {boolean} True if the NFA accepts the string; false otherwise. 
-     */
-    simulate(str) {
-        let does_accept = false;
-
-        // TODO
-
-        return does_accept;
-    }
-
 }
 
 module.exports = NFA;
