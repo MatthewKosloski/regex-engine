@@ -1,4 +1,4 @@
-import {Parser} from './src/parser';
+import { Parser } from './src/parser';
 
 /**
  * Converts a given regular expression to a non-deterministic finite state machine.
