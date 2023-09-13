@@ -1,12 +1,12 @@
-const Parser = require('./Parser');
+import {Parser} from './src/parser';
 
 /**
  * Converts a given regular expression to a non-deterministic finite state machine.
  * 
- * @param {string} regex The regular expression to be converted to a NFA.
+ * @param regex The regular expression to be converted to a NFA.
  * @return The equivalent finite state machine.
  */
-const regexToNFA = (regex) => {
+const regexToNFA = (regex: string) => {
     // Parse the regular expression.
     const parser = new Parser(regex);
     const ast = parser.parse();

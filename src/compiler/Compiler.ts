@@ -1,17 +1,18 @@
+import { NFA } from '../engine';
+
 /**
- * Compiles a regular expression string to a deterministic finite automaton
- * that's suitable for computation.
+ * Compiles a regular expression string to a deterministic finite automaton.
  */
 class Compiler {
 
-    regex = '';
+    private regex = '';
 
     /**
      * Constructs a new instance of the regular expression compiler.
      * 
      * @param {string} regex The regular expression that is to be compiled to a DFA. 
      */
-    constructor(regex) {
+    constructor(regex: string) {
         this.regex = regex;
     }
 
@@ -21,7 +22,7 @@ class Compiler {
      * @return {DFA} An optimized, deterministic finite automaton that's equivalent
      * to the regular expression.
      */
-    compile() {
+    public compile(): void {
         // TODO:
         // return this.minimizeDFA(this.nfaToDFA(this.regexToNFA(this.regex)));
     }
@@ -32,7 +33,7 @@ class Compiler {
      * @param {string} regex The regular expression to be converted to a NFA.
      * @return The equivalent finite state machine.
      */
-    regexToNFA(regex) {
+    private regexToNFA(regex: string): void {
         // TODO:
         // Uses Thompson's construction algorithm.
         // return new NFA( ... );
@@ -45,7 +46,7 @@ class Compiler {
      * @param {NFA} nfa The NFA that is to be converted to a DFA.
      * @return {DFA} The equivalent DFA.
      */
-    nfaToDFA(nfa) {
+    private nfaToDFA(nfa: NFA): void {
         // TODO:
         // Uses the subset construction algorithm.
         // return new DFA( ... );
@@ -58,10 +59,12 @@ class Compiler {
      * @param {DFA} dfa The DFA that is to be optimized.
      * @return {DFA} A minimized/optimized version of the given DFA.
      */
-    minimizeDFA(dfa) {
+    private minimizeDFA(dfa: null) {
         // TODO:
         // Uses Moore's algorithm.
         // return new DFA( ... );
     };
 
 }
+
+export default Compiler;

@@ -1,26 +1,29 @@
-const Token = require('./Token');
+import Token from './Token';
 
 /**
  * Tokenizes a regular expression string.
  */
 class Lexer {
 
-    cursor = 0;
-    tokens = [];
-    regex = '';
+    private cursor = 0;
+    private tokens: Token[] = [];
+    private regex = '';
 
     /**
      * Instantiates a new instance of a lexer to tokenize a regular expression.
      * 
      * @param {string} regex The regular expression that is to be tokenized. 
      */
-    constructor(regex) {
+    constructor(regex: string) {
         this.regex = regex;
     }
 
-    lex() {
+    public lex(): Token[] {
         while (this.hasChars()) {
-            this.tokens.push(this.nextToken());
+            const tok = this.nextToken();
+            if (tok) {
+                this.tokens.push(tok);
+            }
         }
 
         this.tokens.push(new Token('EOF', '\0', ''));
@@ -28,10 +31,14 @@ class Lexer {
         return this.tokens;
     }
 
-    nextToken() {
+    private nextToken(): Token | null {
         const char = this.nextChar();
 
-        let token = null;
+        let token: Token | null = null;
+
+        if (char === null) {
+            return null;
+        }
 
         if (char === '(') {
             token = new Token('LPAREN', char, '');
@@ -56,7 +63,7 @@ class Lexer {
      * @return The next character to be processed or `null` if there
      * are no more characters to process. 
      */
-    peek() {
+    private peek(): string | null {
         return this.regex[this.cursor] ?? null;
     }
 
@@ -67,7 +74,7 @@ class Lexer {
      * or `null` if there is no character following the next character
      * to be processed.
      */
-    peekNext() {
+    private peekNext(): string | null {
         return this.regex[this.cursor + 1] ?? null;
     }
 
@@ -78,7 +85,7 @@ class Lexer {
      * @return True if not all characters in the regular expression
      * string have been tokenized; false otherwise. 
      */
-    hasChars() {
+    private hasChars(): boolean {
         return this.cursor < this.regex.length;
     }
 
@@ -87,12 +94,15 @@ class Lexer {
      * 
      * @returns The next character. 
      */
-    nextChar() {
+    private nextChar(): string | null {
         return this.regex[this.cursor++] ?? null;
     }
 
-    isCharacter(str) {
-        const charCode = str.charCodeAt();
+    private isCharacter(str: string): boolean {
+        const charCode = str.charCodeAt(0);
+
+        // " "
+        const isSpace = charCode === 32;
         
         // [0-9]
         const isInteger = charCode >= 48 && charCode <= 57;
@@ -103,11 +113,9 @@ class Lexer {
         // [a-z]
         const isSmallLetter = charCode >= 97 && charCode <= 122;
 
-        const isSpace = ' ';
-
-        return isInteger || isBigLetter || isSmallLetter || isSpace;
+        return isSpace || isInteger || isBigLetter || isSmallLetter;
     }
 
 }
 
-module.exports = Lexer;
+export default Lexer;

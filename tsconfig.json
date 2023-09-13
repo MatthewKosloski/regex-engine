@@ -1,0 +1,11 @@
+{
+    "include": ["./src/**/*.ts", "program.ts"],
+    "compilerOptions": {
+        "outDir": "build",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "target": "ES2016",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+    }
+}

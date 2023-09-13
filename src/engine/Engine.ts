@@ -3,14 +3,14 @@
  */
 class Engine {
 
-    regex = '';
+    private regex = '';
 
     /**
      * Builds a regular expression engine for the given expression.
      * 
      * @param {string} regex The regular expression. 
      */
-    constructor(regex) {
+    constructor(regex: string) {
         this.regex = regex;
     }
 
@@ -19,12 +19,12 @@ class Engine {
      * 
      * @return {DFA} A DFA.
      */
-    compile() {
+    // compile() {
         // TODO:
         // Compiles the given regular expression to a DFA.
         // compiler = new Compiler( ... );
         // return compiler.compile(this.regex);
-    }
+    // }
 
     /**
      * Executes a search with this regular expression for a match
@@ -34,10 +34,10 @@ class Engine {
      * @return {boolean} True if there is a match between the regular expression and
      * the string `str`; false otherwise.
      */
-    test(str) {
+    // test(str) {
         // TODO:
         // return compile(this.regex).simulate(str);
-    }
-
-
+    // }
 }
+
+export default Engine;

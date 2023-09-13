@@ -1,0 +1,16 @@
+{
+  "name": "regex-engine",
+  "version": "1.0.0",
+  "description": "A DFA-driven regular expression engine",
+  "main": "program.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}

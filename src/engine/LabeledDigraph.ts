@@ -1,19 +1,19 @@
-const Digraph = require('./Digraph');
+import Digraph from './Digraph';
 
 /**
  * A directed graph with labeled edges and vertices.
  */
 class LabeledDigraph extends Digraph {
 
-    vertexLabels = [];
-    edgeLabels = [];
+    private vertexLabels: string[] = [];
+    private edgeLabels: string[] = [];
 
     /**
      * Constructs a new labeled directed graph.
      * 
      * @param {string[]} vertices The vertices. 
      */
-    constructor(vertices) {
+    constructor(vertices: string[]) {
         super(vertices.length);
         this.vertexLabels = vertices;
     }
@@ -24,19 +24,19 @@ class LabeledDigraph extends Digraph {
      * @param {string} target 
      * @param {string} label 
      */
-    addLabeledEdge(source, target, label) {
-        this.addEdge(this.getVertexIndex(source), this.getVertexIndex(target));
+    // addLabeledEdge(source: string, target: string, label: string): void {
+    //     this.addEdge(this.getVertexIndex(source), this.getVertexIndex(target));
 
-        const sourceEdgeLabels = this.edgeLabels[source] ?? [];
-        sourceEdgeLabels[target] = label;
-    }
+    //     const sourceEdgeLabels = this.edgeLabels[source] ?? [];
+    //     sourceEdgeLabels[target] = label;
+    // }
 
     /**
      * 
      * @param {string} source 
      * @param {string} target 
      */
-    removeLabeledEdge(source, target) {
+    public removeLabeledEdge(source: string, target: string): void {
         this.removeEdge(this.getVertexIndex(source), this.getVertexIndex(target));
     }
 
@@ -44,9 +44,9 @@ class LabeledDigraph extends Digraph {
      * 
      * @param {string} source 
      * @param {string} target 
-     * @returns 
+     * @return {boolean}
      */
-    hasLabeledEdge(source, target) {
+    public hasLabeledEdge(source: string, target: string): boolean {
         return this.hasEdge(this.getVertexIndex(source), this.getVertexIndex(target));
     }
 
@@ -54,18 +54,18 @@ class LabeledDigraph extends Digraph {
      * 
      * @param {string} source 
      * @param {string} target 
-     * @returns 
+     * @return {number[]}
      */
-    getLabeledNeighbors(source, target) {
-        return this.getNeighbors(this.getVertexIndex(source), this.getVertexIndex(target));
-    }
+    // getLabeledNeighbors(source: string, target: string): number[] {
+    //     return this.getNeighbors(this.getVertexIndex(source), this.getVertexIndex(target));
+    // }
 
     /**
      * Get the index of the vertex with the provided label.
      * 
      * @param {string} label 
      */
-    getVertexIndex(label) {
+    public getVertexIndex(label: string): number {
         const index = this.vertexLabels.indexOf(label);
 
         if (index === -1) {
@@ -77,4 +77,4 @@ class LabeledDigraph extends Digraph {
 
 }
 
-module.exports = LabeledDigraph;
+export default LabeledDigraph;

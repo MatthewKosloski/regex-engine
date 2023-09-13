@@ -1,13 +1,13 @@
-const LabeledDigraph = require('./LabeledDigraph');
+import LabeledDigraph from './LabeledDigraph';
 
 /**
  * A nondeterministic finite automaton.
  */
 class NFA extends LabeledDigraph {
 
-    alphabet = new Set();
-    startState = '';
-    acceptingStates = new Set();
+    private alphabet = new Set<string>();
+    private startState = '';
+    private acceptingStates = new Set<string>();
 
     /**
      * Constructs a new nondeterministic finite automaton.
@@ -17,7 +17,7 @@ class NFA extends LabeledDigraph {
      * @param {string} startState The start state.
      * @param {Set} acceptingStates The finite set of accepting states.
      */
-    constructor(states, alphabet, startState, acceptingStates) {
+    constructor(states: Set<string>, alphabet: Set<string>, startState: string, acceptingStates: Set<string>) {
         super([...states.values()]);
         this.alphabet = alphabet;
         this.startState = startState;
@@ -32,13 +32,13 @@ class NFA extends LabeledDigraph {
      * @param {string[]} states
      * @return {NFA}
      */
-    addTransition(state, symbol, ...states) {
-        states.forEach((targetState) => {
-            this.addLabeledEdge(state, targetState, symbol);
-        });
+    public addTransition(state: string, symbol: string, ...states: string[]): NFA {
+        // states.forEach((targetState) => {
+        //     this.addLabeledEdge(state, targetState, symbol);
+        // });
 
         return this;
     }
 }
 
-module.exports = NFA;
+export default NFA;

@@ -1,15 +1,15 @@
-const Expr = require('./Expr');
-const Token = require('./Token');
-const Lexer = require('./Lexer');
+import Expr from './Expr';
+import Token from './Token';
+import Lexer from './Lexer';
 
 /**
  * An LL(k) recursive-descent parser for regular expressions.
  */
 class Parser {
 
-    tokens = null;
-    cursor = 0;
-    expr = null;
+    private tokens: Token[] = [];
+    private cursor = 0;
+    private expr: Expr;
 
     OPERATOR_TOKEN_TYPES = ['LPAREN', 'RPAREN', 'PIPE', 'STAR'];
 
@@ -18,7 +18,7 @@ class Parser {
      * 
      * @param {string} regex The regular expression that is to be parsed. 
      */
-    constructor(regex) {
+    constructor(regex: string) {
         this.expr = new Expr('root');
         const lexer = new Lexer(regex);
         this.tokens = lexer.lex();
@@ -30,7 +30,7 @@ class Parser {
      * 
      * @return The root AST node of the parsed regular expression.
      */
-    parse() {
+    public parse(): Expr {
         // regex -> expr* ;
         while (this.hasTokens()) {
             this.expr.addChild(this.parseExpr());
@@ -49,7 +49,7 @@ class Parser {
      * 
      * @return The parsed expression as an AST node. 
      */
-    parseExpr() {
+    private parseExpr() {
         return this.parseAlternationExpr();
     }
 
@@ -60,9 +60,9 @@ class Parser {
      * 
      * @return The parsed parenthesized expression as an AST node. 
      */
-    parseCharacterExpr() {
+    private parseCharacterExpr() {
         if (this.peek()?.type === 'CHAR') {
-            return new Expr('char', null, this.match('CHAR'));
+            return new Expr('char', this.match('CHAR'));
         }
 
         throw new Error('Failed to parse.');
@@ -75,14 +75,13 @@ class Parser {
      * 
      * @return The parsed parenthesized expression as an AST node. 
      */
-    parseParenthesizedExpr() {
+    private parseParenthesizedExpr() {
         if (this.peek()?.type === 'LPAREN') {
-            const expr = new Expr('()');
-
             // "("
-            this.match('LPAREN');
+            const tok = this.match('LPAREN');
     
             // expr+
+            const expr = new Expr('()', tok);
             do {
                 expr.addChild(this.parseExpr());
             } while (this.peek()?.type !== 'RPAREN')
@@ -103,13 +102,11 @@ class Parser {
      * 
      * @return The parsed Kleene Star expression as an AST node. 
      */
-    parseKleeneStarExpr() {
+    private parseKleeneStarExpr() {
         if (this.peekNext()?.type === 'STAR') {
             const operand = this.parseParenthesizedExpr();
             
-            this.match('STAR');
-
-            return new Expr('*', null, operand);
+            return new Expr('*', this.match('STAR'), operand);
         } else {
             return this.parseParenthesizedExpr();
         }
@@ -120,22 +117,22 @@ class Parser {
      * 
      * @return The parsed alternation expression as an AST node. 
      */
-    parseAlternationExpr() {
+    private parseAlternationExpr() {
         if (this.peekNext()?.type === 'PIPE') {
 
             const left = this.parseConcatExpr();
 
-            this.match('PIPE');
+            const tok = this.match('PIPE');
 
             const right = this.parseConcatExpr();
 
-            return new Expr('|', null, left, right);
+            return new Expr('|', tok, left, right);
         } else {
             return this.parseConcatExpr();
         }
     }
     
-    parseConcatExpr() {
+    private parseConcatExpr() {
         const expr = new Expr('.');
 
         // kleene_expr+
@@ -144,7 +141,7 @@ class Parser {
         } while (!(this.isTokenOperator() || this.peek()?.type === 'EOF'))
 
         if (expr.children.length === 1) {
-            expr.addChild(new Expr('', null, new Token('', '', '')));
+            expr.addChild(new Expr('', null, new Expr('')));
         }
 
         return expr;
@@ -155,17 +152,17 @@ class Parser {
      * 
      * @return True if not all tokens have been parsed; false otherwise. 
      */
-    hasTokens() {
+    private hasTokens() {
         return this.tokens[this.cursor].type !== 'EOF';
     }
 
     /**
      * Returns the first token of lookahead without consuming it.
      * 
-     * @return {Token?} The next token of lookahead or `null` if there is
+     * @return The next token of lookahead or `null` if there is
      * no such token.
      */
-    peek() {
+    private peek() {
         return this.tokens[this.cursor] ?? null;
     }
 
@@ -177,20 +174,8 @@ class Parser {
      * @return {boolean} True if at least one of the provided token types
      * matches the token type of the first token of lookahead; false otherwise.
      */
-    isTokenType(...tokTypes) {
+    private isTokenType(...tokTypes: string[]) {
         return tokTypes.includes(this.peek()?.type);
-    }
-
-    /**
-     * Indicates whether the token type of the second token of lookahead
-     * is one of the following types.
-     * 
-     * @param  {string[]} tokTypes One or more token types.
-     * @return {boolean} True if at least one of the provided token types
-     * matches the token type of the second token of lookahead; false otherwise.
-     */
-    isNextTokenType(...tokTypes) {
-        return tokTypes.includes(this.peekNext()?.type);
     }
 
     /**
@@ -198,17 +183,8 @@ class Parser {
      * 
      * @returns {boolean} True if the first token of lookahead is an operator; false otherwise. 
      */
-    isTokenOperator() {
+    private isTokenOperator() {
         return this.isTokenType(...this.OPERATOR_TOKEN_TYPES);
-    }
-
-    /**
-     * Indicates whether the second token of lookahead is a regular expression operator.
-     * 
-     * @returns {boolean} True if the second token of lookahead is an operator; false otherwise. 
-     */
-    isNextTokenOperator() {
-        return this.isNextTokenType(...this.OPERATOR_TOKEN_TYPES);
     }
 
     /**
@@ -217,7 +193,7 @@ class Parser {
      * @return {Token?} The second token of lookahead or `null` if there is
      * no such token.
      */
-    peekNext() {
+    private peekNext(): Token | null {
         return this.tokens[this.cursor + 1] ?? null;
     }
 
@@ -226,7 +202,7 @@ class Parser {
      * 
      * @return {Token?} The next token or `null`.
      */
-    consume() {
+    private consume(): Token | null {
         return this.tokens[this.cursor++] ?? null;
     }
 
@@ -235,11 +211,11 @@ class Parser {
      * return the token; error otherwise.
      * 
      * @param {string} tokType The type of token that is to be matched.
-     * @return {Token} The next token.
+     * @return {Token | null} The next token.
      * @throws Error If the next token is not of the provided type or if there
      * is no next token. 
      */
-    match(tokType) {
+    private match(tokType: string): Token | null {
         const nextToken = this.peek();
 
         if (nextToken?.type === tokType) {
@@ -252,4 +228,4 @@ class Parser {
     }
 }
 
-module.exports = Parser;
+export default Parser;

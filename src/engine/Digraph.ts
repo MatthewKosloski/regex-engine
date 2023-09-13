@@ -4,14 +4,14 @@
  */
 class Digraph {
 
-    matrix = [];
+    private matrix: boolean[][] = [];
 
     /**
      * Constructs a new directed graph with a provided number of vertices.
      *
      * @param {number} numVertices The number of vertices in the graph.
      */
-    constructor(numVertices) {
+    constructor(numVertices: number) {
         for (let row = 0; row < numVertices; row++) {
             this.matrix[row] = [];
             for (let col = 0; col < numVertices; col++) {
@@ -27,7 +27,7 @@ class Digraph {
      * @param {number} target The target vertex.
      * @return {void}
      */
-    addEdge(source, target) {
+    public addEdge(source: number, target: number): void {
         this.validateVertices(source, target);
         this.matrix[source][target] = true;
     }
@@ -39,7 +39,7 @@ class Digraph {
      * @param {number} target The target vertex.
      * @return {void}
      */
-    removeEdge(source, target) {
+    public removeEdge(source: number, target: number): void {
         this.validateVertices(source, target);
         this.matrix[source][target] = false;
     }
@@ -51,7 +51,7 @@ class Digraph {
      * @param {number} target The target vertex.
      * @return {boolean} True if there's an edge going to target from source; false otherwise.
      */
-    hasEdge(source, target) {
+    public hasEdge(source: number, target: number): boolean {
         this.validateVertices(source, target);
         return this.matrix[source][target];
     }
@@ -63,7 +63,7 @@ class Digraph {
      * @returns {number[]} The vertices that neighbor the given vertex. That is, those vertices that
      * have edges going to it from the given vertex.
      */
-    getNeighbors(vertex) {
+    public getNeighbors(vertex: number): number[] {
         this.validateVertices(vertex);
 
         const neighbors = this.matrix[vertex].map((value, index) => value ? index : -1)
@@ -72,7 +72,7 @@ class Digraph {
         return neighbors;
     }
 
-    validateVertices(...vertices) {
+    private validateVertices(...vertices: number[]): void {
         vertices.forEach((vertex) => {
             const isValid = vertex >= 0 && vertex <= this.matrix.length - 1;
 
@@ -83,4 +83,4 @@ class Digraph {
     }
 }
 
-module.exports = Digraph;
+export default Digraph;
