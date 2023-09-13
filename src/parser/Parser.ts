@@ -1,4 +1,4 @@
-import Expr from './Expr';
+import Expr, { ExprType } from './Expr';
 import Token, { TokenType } from './Token';
 import Lexer from './Lexer';
 
@@ -17,7 +17,7 @@ class Parser {
      * @param regex The regular expression that is to be parsed. 
      */
     constructor(regex: string) {
-        this.expr = new Expr('root');
+        this.expr = new Expr(ExprType.Root);
         const lexer = new Lexer(regex);
         this.tokens = lexer.lex();
     }
@@ -60,7 +60,7 @@ class Parser {
      */
     private parseCharacterExpr() {
         if (this.peek()?.type === TokenType.Char) {
-            return new Expr('char', this.match(TokenType.Char));
+            return new Expr(ExprType.Character, this.match(TokenType.Char));
         }
 
         throw new Error('Failed to parse.');
@@ -79,7 +79,7 @@ class Parser {
             const tok = this.match(TokenType.LeftParen);
     
             // expr+
-            const expr = new Expr('()', tok);
+            const expr = new Expr(ExprType.Parenthesized, tok);
             do {
                 expr.addChild(this.parseExpr());
             } while (this.peek()?.type !== TokenType.RightParen)
@@ -104,7 +104,7 @@ class Parser {
         if (this.peekNext()?.type === TokenType.Star) {
             const operand = this.parseParenthesizedExpr();
             
-            return new Expr('*', this.match(TokenType.Star), operand);
+            return new Expr(ExprType.KleeneStar, this.match(TokenType.Star), operand);
         } else {
             return this.parseParenthesizedExpr();
         }
@@ -124,14 +124,14 @@ class Parser {
 
             const right = this.parseConcatExpr();
 
-            return new Expr('|', tok, left, right);
+            return new Expr(ExprType.Alternation, tok, left, right);
         } else {
             return this.parseConcatExpr();
         }
     }
     
     private parseConcatExpr() {
-        const expr = new Expr('.');
+        const expr = new Expr(ExprType.Concatenation);
 
         // kleene_expr+
         do {
@@ -139,7 +139,7 @@ class Parser {
         } while (!(this.isTokenOperator() || this.peek()?.type === TokenType.EndOfFile))
 
         if (expr.children.length === 1) {
-            expr.addChild(new Expr('', null, new Expr('')));
+            expr.addChild(new Expr(ExprType.Erasure));
         }
 
         return expr;

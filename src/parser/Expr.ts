@@ -2,17 +2,27 @@ import Token from "./Token";
 
 export type Parent = Expr | null;
 
+export enum ExprType {
+    Alternation = '|',
+    Character = 'C',
+    Concatenation = '.',
+    Erasure = '',
+    KleeneStar = '*',
+    Parenthesized = '()',
+    Root = 'R',
+}
+
 /**
  * Represents an expression.
  */
 class Expr {
 
-    private _type: string = '';
+    private _type: ExprType;
     private _token: Token | null = null;
     private _parent: Parent = null;
     private _children: Expr[] = [];
 
-    constructor(type = '', token: Token | null = null, parent: Parent = null, ...children: Expr[]) {
+    constructor(type: ExprType, token: Token | null = null, parent: Parent = null, ...children: Expr[]) {
         this._type = type;
         this._token = token;
         this._parent = parent;
@@ -23,7 +33,7 @@ class Expr {
         return this._parent;
     }
 
-    get type(): string {
+    get type(): ExprType {
         return this._type;
     }
 
