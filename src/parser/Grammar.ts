@@ -82,7 +82,8 @@ class Grammar extends Parser {
     /**
      * Parses a Kleene Star expression.
      * 
-     * Grammar rule: kleene_expr -> paren_expr "*" | paren_expr ;
+     * Grammar rule:
+     *   `kleene_expr -> paren_expr "*" | paren_expr ;`
      * 
      * @return The parsed Kleene Star expression as an AST node. 
      */
@@ -104,7 +105,8 @@ class Grammar extends Parser {
     /**
      * Parses a parenthesized expression.
      * 
-     * Grammar rule: paren_expr -> "(" expr+ ")" | char_expr ;
+     * Grammar rule:
+     *   `paren_expr -> "(" expr+ ")" | char_expr ;`
      * 
      * @return The parsed parenthesized expression as an AST node. 
      */
@@ -132,7 +134,8 @@ class Grammar extends Parser {
     /**
      * Parses a parenthesized expression.
      * 
-     * Grammar rule: char_expr -> [a-z] | [A-Z] | [0-9] ;
+     * Grammar rule:
+     *   `char_expr -> [a-z] | [A-Z] | [0-9] ;`
      * 
      * @return The parsed parenthesized expression as an AST node. 
      */
