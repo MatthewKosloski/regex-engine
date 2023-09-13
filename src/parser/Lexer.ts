@@ -1,4 +1,4 @@
-import Token from './Token';
+import Token, { TokenType } from './Token';
 
 /**
  * Tokenizes a regular expression string.
@@ -31,7 +31,7 @@ class Lexer {
             }
         }
 
-        this.tokens.push(new Token('EOF', '\0', ''));
+        this.tokens.push(new Token(TokenType.EndOfFile, '\0', ''));
 
         return this.tokens;
     }
@@ -46,15 +46,15 @@ class Lexer {
         }
 
         if (char === '(') {
-            token = new Token('LPAREN', char, '');
+            token = new Token(TokenType.LeftParen, char, '');
         } else if (char === ')') {
-            token = new Token('RPAREN', char, '');
+            token = new Token(TokenType.RightParen, char, '');
         } else if (char === '*') {
-            token = new Token('STAR', char, '');
+            token = new Token(TokenType.Star, char, '');
         } else if (char === '|') {
-            token = new Token('PIPE', char, '');
+            token = new Token(TokenType.Pipe, char, '');
         } else if (this.isCharacter(char)) {
-            token = new Token('CHAR', char, '');
+            token = new Token(TokenType.Char, char, '');
         } else {
             throw new Error(`Unexpected character "${char}".`);
         }
