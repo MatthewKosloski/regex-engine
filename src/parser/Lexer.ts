@@ -12,12 +12,17 @@ class Lexer {
     /**
      * Instantiates a new instance of a lexer to tokenize a regular expression.
      * 
-     * @param {string} regex The regular expression that is to be tokenized. 
+     * @param regex The regular expression that is to be tokenized. 
      */
     constructor(regex: string) {
         this.regex = regex;
     }
 
+    /**
+     * Tokenize the regular expression.
+     * 
+     * @returns The tokenized regular expression. 
+     */
     public lex(): Token[] {
         while (this.hasChars()) {
             const tok = this.nextToken();
@@ -60,7 +65,7 @@ class Lexer {
     /**
      * Returns the next character without incrementing the cursor.
      * 
-     * @return The next character to be processed or `null` if there
+     * @returns The next character to be processed or `null` if there
      * are no more characters to process. 
      */
     private peek(): string | null {
@@ -70,7 +75,7 @@ class Lexer {
     /**
      * Returns the character after the next without incrementing the cursor.
      * 
-     * @return The character after the next character to be processed 
+     * @returns The character after the next character to be processed 
      * or `null` if there is no character following the next character
      * to be processed.
      */
@@ -82,7 +87,7 @@ class Lexer {
      * Indicates whether there are still characters in the regular
      * expression string that need to be tokenized.
      * 
-     * @return True if not all characters in the regular expression
+     * @returns True if not all characters in the regular expression
      * string have been tokenized; false otherwise. 
      */
     private hasChars(): boolean {
