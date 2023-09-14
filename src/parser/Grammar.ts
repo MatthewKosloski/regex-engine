@@ -34,49 +34,26 @@ class Grammar extends Parser {
      * Parses an alternation expression.
      * 
      * Grammar rule:
-     *   `alt_expr -> (concat_expr "|" concat_expr) | concat_expr ;`
+     *   `alt_expr -> (kleene_expr "|" kleene_expr) | kleene_expr ;`
      * 
      * @returns The parsed alternation expression as an AST node. 
      */
     private parseAlternationExpr() {
         if (this.peekNext()?.type === TokenType.Pipe) {
-            // concat_expr
-            const left = this.parseConcatExpr();
+            // kleene_expr
+            const left = this.parseKleeneStarExpr();
 
             // "|"
             const tok = this.match(TokenType.Pipe);
 
-            // concat_expr
-            const right = this.parseConcatExpr();
+            // kleene_expr
+            const right = this.parseKleeneStarExpr();
 
             return new Expr(ExprType.Alternation, tok, left, right);
         } else {
-            // concat_expr
-            return this.parseConcatExpr();
+            // kleene_expr
+            return this.parseKleeneStarExpr();
         }
-    }
-
-    /**
-     * Parses a concatenation expression.
-     * 
-     * Grammar rule:
-     *   `concat_expr -> kleene_expr+ ;`
-     * 
-     * @returns The parsed alternation expression as an AST node. 
-     */
-    private parseConcatExpr() {
-        const expr = new Expr(ExprType.Concatenation);
-
-        // kleene_expr+
-        do {
-            expr.addChild(this.parseKleeneStarExpr());
-        } while (!(this.isTokenOperator() || this.peek()?.type === TokenType.EndOfFile))
-
-        if (expr.children.length === 1) {
-            expr.addChild(new Expr(ExprType.Erasure));
-        }
-
-        return expr;
     }
 
     /**
