@@ -8,6 +8,12 @@ class Grammar extends Parser {
         super(regex);
     }
 
+    /**
+     * Parses the regular expression, returning a reference to the root
+     * node of the resulting abstract syntax tree.
+     * 
+     * @returns The root of the AST. 
+     */
     public parse(): Expr {
         // regex -> expr* ;
         while (this.hasTokens()) {
