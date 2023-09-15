@@ -1,7 +1,6 @@
-import Expr from './Expr';
-import Token, { TokenType } from './Token';
+import {Expr, RootExpr} from './expressions';
 import Lexer from './Lexer';
-import RootExpr from './RootExpr';
+import Token, {TokenType} from './Token';
 
 /**
  * An LL(k) recursive-descent parser for regular expressions.

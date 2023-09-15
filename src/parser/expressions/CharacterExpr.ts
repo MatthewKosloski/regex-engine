@@ -1,5 +1,5 @@
 import Expr, { ExprType } from './Expr';
-import Token from './Token';
+import Token from '../Token';
 
 class CharacterExpr extends Expr {
     constructor(token: Token) {

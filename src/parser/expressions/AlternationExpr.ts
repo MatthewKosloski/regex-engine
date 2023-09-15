@@ -1,5 +1,5 @@
 import Expr, { ExprType } from './Expr';
-import Token from './Token';
+import Token from '../Token';
 
 class AlternationExpr extends Expr {
     constructor(left: Expr, right: Expr, token?: Token) {

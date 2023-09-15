@@ -1,10 +1,12 @@
-import AlternationExpr from './AlternationExpr';
-import CharacterExpr from './CharacterExpr';
-import Expr from './Expr';
-import KleeneStarExpr from './KleeneStarExpr';
-import ParenthesizedExpr from './ParenthesizedExpr';
-import Parser from './Parser';
+import { 
+    AlternationExpr,
+    CharacterExpr,
+    Expr,
+    KleeneStarExpr,
+    ParenthesizedExpr
+} from './expressions';
 import { TokenType } from './Token';
+import Parser from './Parser';
 
 class Grammar extends Parser {
 

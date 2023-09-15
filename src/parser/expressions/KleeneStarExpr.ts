@@ -1,5 +1,5 @@
 import Expr, { ExprType } from './Expr';
-import Token from './Token';
+import Token from '../Token';
 
 class KleeneStarExpr extends Expr {
     constructor(operand: Expr, token: Token) {
