@@ -72,7 +72,7 @@ class Grammar extends Parser {
             // "*"
             const tok = this.match(TokenType.Star);
 
-            return new Expr(ExprType.KleeneStar, tok, operand);
+            return new Expr(ExprType.KleeneStar, tok, null, operand);
         } else {
             // paren_expr
             return this.parseParenthesizedExpr();
