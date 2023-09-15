@@ -58,7 +58,7 @@ class Grammar extends Parser {
      * @returns The parsed alternation expression as an AST node. 
      */
     private parseAlternationExpr(): Expr | null {
-        if (this.peek()?.type === TokenType.Pipe) {
+        if (this.hasToken(TokenType.Pipe)) {
             // "|"
             const tok = this.match(TokenType.Pipe);
 
@@ -86,7 +86,7 @@ class Grammar extends Parser {
      * @return The parsed Kleene Star expression as an AST node. 
      */
     private parseKleeneStarExpr() {
-        if (this.peekNext()?.type === TokenType.Star) {
+        if (this.hasNextToken(TokenType.Star)) {
             // paren_expr
             const operand = this.parseParenthesizedExpr();
 
@@ -109,7 +109,7 @@ class Grammar extends Parser {
      * @return The parsed parenthesized expression as an AST node. 
      */
     private parseParenthesizedExpr() {
-        if (this.peek()?.type === TokenType.LeftParen) {
+        if (this.hasToken(TokenType.LeftParen)) {
             // "("
             const tok = this.match(TokenType.LeftParen);
 
@@ -117,7 +117,7 @@ class Grammar extends Parser {
             const children: Expr[] = [];
             do {
                 children.push(this.parseExpr());
-            } while (this.peek()?.type !== TokenType.RightParen);
+            } while (this.hasToken(TokenType.RightParen));
 
             // ")"
             this.match(TokenType.RightParen);
@@ -138,7 +138,7 @@ class Grammar extends Parser {
      * @return The parsed parenthesized expression as an AST node. 
      */
     private parseCharacterExpr() {
-        if (this.peek()?.type === TokenType.Char) {
+        if (this.hasToken(TokenType.Char)) {
             const tok = this.match(TokenType.Char);
             return new CharacterExpr(tok);
         }

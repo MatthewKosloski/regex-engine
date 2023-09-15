@@ -54,20 +54,6 @@ abstract class Parser {
     }
 
     /**
-     * Indicates whether the first token of lookahead is a regular expression operator.
-     * 
-     * @returns True if the first token of lookahead is an operator; false otherwise. 
-     */
-    protected isTokenOperator() {
-        return this.isTokenType(...[
-            TokenType.LeftParen,
-            TokenType.RightParen,
-            TokenType.Pipe,
-            TokenType.Star,
-        ]);
-    }
-
-    /**
      * Returns the second token of lookahead without consuming it.
      * 
      * @returns The second token of lookahead or `null` if there is
@@ -75,6 +61,26 @@ abstract class Parser {
      */
     protected peekNext(): Token | null {
         return this.tokens[this.cursor + 1] ?? null;
+    }
+
+    /**
+     * Indicates whether the first token of lookahead is of the given type.
+     * 
+     * @param tokType The token type. 
+     * @returns True if the first lookahead token is of the given type; false otherwise.
+     */
+    protected hasToken(tokType: TokenType) {
+        return this.peek()?.type === tokType;
+    }
+
+    /**
+     * Indicates whether the second token of lookahead is of the given type.
+     * 
+     * @param tokType The token type. 
+     * @returns True if the second lookahead token is of the given type; false otherwise.
+     */
+    protected hasNextToken(tokType: TokenType) {
+        return this.peekNext()?.type === tokType;
     }
 
     /**
@@ -95,6 +101,20 @@ abstract class Parser {
         } else {
             throw new Error(`Expected a token of type "${tokType}" but there are no more tokens.`);
         }
+    }
+
+    /**
+     * Indicates whether the first token of lookahead is a regular expression operator.
+     * 
+     * @returns True if the first token of lookahead is an operator; false otherwise. 
+     */
+    protected isTokenOperator() {
+        return this.isTokenType(...[
+            TokenType.LeftParen,
+            TokenType.RightParen,
+            TokenType.Pipe,
+            TokenType.Star,
+        ]);
     }
 
     /**
