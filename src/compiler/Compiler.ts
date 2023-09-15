@@ -1,4 +1,6 @@
 import { NFA } from '../engine';
+import { Parser } from '../parser';
+import { Expr } from '../parser/expressions';
 
 /**
  * Compiles a regular expression string to a deterministic finite automaton.
@@ -10,7 +12,7 @@ class Compiler {
     /**
      * Constructs a new instance of the regular expression compiler.
      * 
-     * @param {string} regex The regular expression that is to be compiled to a DFA. 
+     * @param regex The regular expression that is to be compiled to a DFA. 
      */
     constructor(regex: string) {
         this.regex = regex;
@@ -19,23 +21,29 @@ class Compiler {
     /**
      * Compile the regular expression.
      * 
-     * @return {DFA} An optimized, deterministic finite automaton that's equivalent
+     * @return An optimized, deterministic finite automaton that's equivalent
      * to the regular expression.
      */
     public compile(): void {
         // TODO:
-        // return this.minimizeDFA(this.nfaToDFA(this.regexToNFA(this.regex)));
+        const ast = new Parser(this.regex).parse();
+        const nfa = this.regexToNFA(ast);
+
+        // TODO:
+        // return this.minimizeDFA(this.nfaToDFA(this.regexToNFA(ast)));
     }
 
     /**
      * Converts a given regular expression to a non-deterministic finite state machine.
      * 
-     * @param {string} regex The regular expression to be converted to a NFA.
+     * @param regex The regular expression to be converted to a NFA.
      * @return The equivalent finite state machine.
      */
-    private regexToNFA(regex: string): void {
+    private regexToNFA(regex: Expr): void {
         // TODO:
         // Uses Thompson's construction algorithm.
+
+        // Perform a post-order traversal through the AST to build the NFA.
         // return new NFA( ... );
     }
 
@@ -43,27 +51,27 @@ class Compiler {
      * Given a non-deterministic finite automaton, construct an equivalent deterministic
      * finite automaton.
      * 
-     * @param {NFA} nfa The NFA that is to be converted to a DFA.
-     * @return {DFA} The equivalent DFA.
+     * @param nfa The NFA that is to be converted to a DFA.
+     * @return The equivalent DFA.
      */
-    private nfaToDFA(nfa: NFA): void {
+    //private nfaToDFA(nfa: NFA): void {
         // TODO:
         // Uses the subset construction algorithm.
         // return new DFA( ... );
-    };
+    //};
 
     /**
      * Given a deterministic finite automaton, construct an equivalent deterministic
      * finite automaton that is optimized for computation.
      * 
-     * @param {DFA} dfa The DFA that is to be optimized.
-     * @return {DFA} A minimized/optimized version of the given DFA.
+     * @param dfa The DFA that is to be optimized.
+     * @return A minimized/optimized version of the given DFA.
      */
-    private minimizeDFA(dfa: null) {
+    // private minimizeDFA(dfa: null) {
         // TODO:
         // Uses Moore's algorithm.
         // return new DFA( ... );
-    };
+    //};
 
 }
 
