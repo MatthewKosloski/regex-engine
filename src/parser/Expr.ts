@@ -22,7 +22,13 @@ class Expr {
     private _parent: Parent = null;
     private _children: Expr[] = [];
 
-    constructor(type: ExprType, token: Token | null = null, parent: Parent = null, ...children: Expr[]) {
+    constructor(args: {
+        type: ExprType,
+        children?: Expr[],
+        token?: Token | null,
+        parent?: Parent,
+    }) {
+        const { type, token = null, parent = null, children = [] } = args;
         this._type = type;
         this._token = token;
         this._parent = parent;

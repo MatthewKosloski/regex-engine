@@ -39,8 +39,10 @@ class Grammar extends Parser {
         const right = this.parseAlternationExpr();
 
         return right !== null
-            ? new Expr(ExprType.Alternation, null, null, left, right)
-            : left;
+            ? new Expr({
+                type: ExprType.Alternation,
+                children: [left, right]
+            }) : left;
     }
 
     /**
@@ -63,8 +65,10 @@ class Grammar extends Parser {
             const right = this.parseAlternationExpr();
 
             return right !== null
-                ? new Expr(ExprType.Alternation, tok, null, left, right)
-                : left;
+            ? new Expr({
+                type: ExprType.Alternation,
+                children: [left, right]
+            }) : left;
         }
 
         // ε
@@ -87,7 +91,11 @@ class Grammar extends Parser {
             // "*"
             const tok = this.match(TokenType.Star);
 
-            return new Expr(ExprType.KleeneStar, tok, null, operand);
+            return new Expr({
+                type: ExprType.KleeneStar,
+                token: tok,
+                children: [operand]
+            });
         } else {
             // paren_expr
             return this.parseParenthesizedExpr();
@@ -108,7 +116,10 @@ class Grammar extends Parser {
             const tok = this.match(TokenType.LeftParen);
 
             // expr+
-            const expr = new Expr(ExprType.Parenthesized, tok);
+            const expr = new Expr({
+                type: ExprType.Parenthesized,
+                token: tok
+            });
             do {
                 expr.addChild(this.parseExpr());
             } while (this.peek()?.type !== TokenType.RightParen);
@@ -135,7 +146,10 @@ class Grammar extends Parser {
         if (this.peek()?.type === TokenType.Char) {
             const tok = this.match(TokenType.Char);
 
-            return new Expr(ExprType.Character, tok);
+            return new Expr({
+                type: ExprType.Character,
+                token: tok
+            });
         }
 
         // If we reach this point, then the regular expression

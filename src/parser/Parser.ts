@@ -17,7 +17,7 @@ abstract class Parser {
      * @param regex The regular expression that is to be parsed. 
      */
     constructor(regex: string) {
-        this._expr = new Expr(ExprType.Root);
+        this._expr = new Expr({ type: ExprType.Root });
         const lexer = new Lexer(regex);
         this.tokens = lexer.lex();
     }
