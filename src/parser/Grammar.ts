@@ -1,4 +1,8 @@
-import Expr, { ExprType } from './Expr';
+import AlternationExpr from './AlternationExpr';
+import CharacterExpr from './CharacterExpr';
+import Expr from './Expr';
+import KleeneStarExpr from './KleeneStarExpr';
+import ParenthesizedExpr from './ParenthesizedExpr';
 import Parser from './Parser';
 import { TokenType } from './Token';
 
@@ -39,10 +43,8 @@ class Grammar extends Parser {
         const right = this.parseAlternationExpr();
 
         return right !== null
-            ? new Expr({
-                type: ExprType.Alternation,
-                children: [left, right]
-            }) : left;
+            ? new AlternationExpr(left, right)
+            : left;
     }
 
     /**
@@ -65,10 +67,8 @@ class Grammar extends Parser {
             const right = this.parseAlternationExpr();
 
             return right !== null
-            ? new Expr({
-                type: ExprType.Alternation,
-                children: [left, right]
-            }) : left;
+                ? new AlternationExpr(left, right, tok)
+                : left;
         }
 
         // ε
@@ -91,11 +91,7 @@ class Grammar extends Parser {
             // "*"
             const tok = this.match(TokenType.Star);
 
-            return new Expr({
-                type: ExprType.KleeneStar,
-                token: tok,
-                children: [operand]
-            });
+            return new KleeneStarExpr(operand, tok);
         } else {
             // paren_expr
             return this.parseParenthesizedExpr();
@@ -116,18 +112,15 @@ class Grammar extends Parser {
             const tok = this.match(TokenType.LeftParen);
 
             // expr+
-            const expr = new Expr({
-                type: ExprType.Parenthesized,
-                token: tok
-            });
+            const children: Expr[] = [];
             do {
-                expr.addChild(this.parseExpr());
+                children.push(this.parseExpr());
             } while (this.peek()?.type !== TokenType.RightParen);
 
             // ")"
             this.match(TokenType.RightParen);
 
-            return expr;
+            return new ParenthesizedExpr(children, tok);
         } else {
             // char_expr
             return this.parseCharacterExpr();
@@ -145,11 +138,7 @@ class Grammar extends Parser {
     private parseCharacterExpr() {
         if (this.peek()?.type === TokenType.Char) {
             const tok = this.match(TokenType.Char);
-
-            return new Expr({
-                type: ExprType.Character,
-                token: tok
-            });
+            return new CharacterExpr(tok);
         }
 
         // If we reach this point, then the regular expression

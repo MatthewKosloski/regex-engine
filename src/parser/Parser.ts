@@ -1,6 +1,7 @@
-import Expr, { ExprType } from './Expr';
+import Expr from './Expr';
 import Token, { TokenType } from './Token';
 import Lexer from './Lexer';
+import RootExpr from './RootExpr';
 
 /**
  * An LL(k) recursive-descent parser for regular expressions.
@@ -17,7 +18,7 @@ abstract class Parser {
      * @param regex The regular expression that is to be parsed. 
      */
     constructor(regex: string) {
-        this._expr = new Expr({ type: ExprType.Root });
+        this._expr = new RootExpr();
         const lexer = new Lexer(regex);
         this.tokens = lexer.lex();
     }
