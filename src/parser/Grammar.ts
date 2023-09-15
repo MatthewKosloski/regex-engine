@@ -105,7 +105,7 @@ class Grammar extends Parser {
             const expr = new Expr(ExprType.Parenthesized, tok);
             do {
                 expr.addChild(this.parseExpr());
-            } while (this.peek()?.type !== TokenType.RightParen)
+            } while (this.peek()?.type !== TokenType.RightParen);
 
             // ")"
             this.match(TokenType.RightParen);
