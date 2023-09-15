@@ -21,29 +21,16 @@ class Grammar extends Parser {
      * Parses an expression.
      * 
      * Grammar rule:
-     *  `expr -> alt_expr ;`
+     *   `expr -> kleene_expr alt_expr ;`
      * 
      * @returns The parsed expression as an AST node. 
      */
-    private parseExpr() {
-        // alt_expr
-        return this.parseAlternationExpr();
-    }
-
-    /**
-     * Parses an alternation expression.
-     * 
-     * Grammar rule:
-     *   `alt_expr -> kleene_expr alt_expr' ;`
-     * 
-     * @returns The parsed alternation expression as an AST node. 
-     */
-    private parseAlternationExpr(): Expr {
+    private parseExpr(): Expr {
         // kleene_expr
         const left = this.parseKleeneStarExpr();
 
-        // alt_expr'
-        const right = this.parseAlternationPrimeExpr();
+        // alt_expr
+        const right = this.parseAlternationExpr();
 
         return right !== null
             ? new Expr(ExprType.Alternation, null, null, left, right)
@@ -51,14 +38,14 @@ class Grammar extends Parser {
     }
 
     /**
-     * Parses an alternation prime expression.
+     * Parses an alternation expression.
      * 
      * Grammar rule:
-     *   `alt_expr' -> "|" kleene_expr alt_expr' | ε ;`
+     *   `alt_expr -> "|" kleene_expr alt_expr | ε ;`
      * 
      * @returns The parsed alternation expression as an AST node. 
      */
-    private parseAlternationPrimeExpr(): Expr | null {
+    private parseAlternationExpr(): Expr | null {
         if (this.peek()?.type === TokenType.Pipe) {
             // "|"
             const tok = this.match(TokenType.Pipe);
@@ -66,8 +53,8 @@ class Grammar extends Parser {
             // kleene_expr
             const left = this.parseKleeneStarExpr();
 
-            // alt_expr'
-            const right = this.parseAlternationPrimeExpr();
+            // alt_expr
+            const right = this.parseAlternationExpr();
 
             return right !== null
                 ? new Expr(ExprType.Alternation, tok, null, left, right)
