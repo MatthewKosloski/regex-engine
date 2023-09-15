@@ -74,6 +74,16 @@ abstract class Parser {
     }
 
     /**
+     * Indicates whether the first token of lookahead is not of the given type.
+     * 
+     * @param tokType The token type. 
+     * @returns True if the first lookahead token is not of the given type; false otherwise.
+     */
+    protected doesNotHaveToken(tokType: TokenType) {
+        return this.peek()?.type !== tokType;
+    }
+
+    /**
      * Indicates whether the second token of lookahead is of the given type.
      * 
      * @param tokType The token type. 

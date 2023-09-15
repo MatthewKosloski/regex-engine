@@ -117,7 +117,7 @@ class Grammar extends Parser {
             const children: Expr[] = [];
             do {
                 children.push(this.parseExpr());
-            } while (this.hasToken(TokenType.RightParen));
+            } while (this.doesNotHaveToken(TokenType.RightParen));
 
             // ")"
             this.match(TokenType.RightParen);
