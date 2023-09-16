@@ -53,7 +53,7 @@ class Lexer {
             token = new Token(TokenType.Star, char, '');
         } else if (char === '|') {
             token = new Token(TokenType.Pipe, char, '');
-        } else if (this.isCharacter(char)) {
+        } else if (this.isWordCharacter(char)) {
             token = new Token(TokenType.Char, char, '');
         } else {
             throw new Error(`Unexpected character "${char}".`);
@@ -103,22 +103,33 @@ class Lexer {
         return this.regex[this.cursor++] ?? null;
     }
 
-    private isCharacter(str: string): boolean {
-        const charCode = str.charCodeAt(0);
+    /**
+     * Indicates whether the provided string is a word character (alphanumeric & underscore).d
+     * 
+     * @param str A character. 
+     * @returns 
+     */
+    private isWordCharacter(str: string): boolean {
 
-        // " "
-        const isSpace = charCode === 32;
+        if (str.length !== 1) {
+            throw new Error('str must be a string of length one.');
+        }
+
+        const charCode = str.charCodeAt(0);
         
         // [0-9]
         const isInteger = charCode >= 48 && charCode <= 57;
         
         // [A-Z]
         const isBigLetter = charCode >= 65 && charCode <= 90;
+
+        // "_"
+        const isUnderscore = charCode === 95;
         
         // [a-z]
         const isSmallLetter = charCode >= 97 && charCode <= 122;
 
-        return isSpace || isInteger || isBigLetter || isSmallLetter;
+        return isInteger || isBigLetter || isUnderscore || isSmallLetter;
     }
 
 }

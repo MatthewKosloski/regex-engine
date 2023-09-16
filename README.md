@@ -8,5 +8,5 @@ expr -> kleene_expr alt_expr ;
 alt_expr -> "|" kleene_expr alt_expr | ε ;
 kleene_expr -> paren_expr "*"? ;
 paren_expr -> "(" expr+ ")" | char_expr ;
-char_expr -> [a-z] | [A-Z] | [0-9] ;
+char_expr -> [a-z] | [A-Z] | [0-9] | _ ;
 ```
