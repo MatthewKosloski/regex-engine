@@ -81,7 +81,7 @@ class Grammar extends Parser {
      * Parses a Kleene Star expression.
      * 
      * Grammar rule:
-     *   `kleene_expr -> paren_expr "*" | paren_expr ;`
+     *   `kleene_expr -> paren_expr "*"? ;`
      * 
      * @return The parsed Kleene Star expression as an AST node. 
      */
@@ -96,7 +96,14 @@ class Grammar extends Parser {
             return new KleeneStarExpr(operand, tok);
         } else {
             // paren_expr
-            return this.parseParenthesizedExpr();
+            const expr = this.parseParenthesizedExpr();
+
+            if (this.hasToken(TokenType.Star)) {
+                const tok = this.match(TokenType.Star);
+                return new KleeneStarExpr(expr, tok);
+            }
+
+            return expr;
         }
     }
 
