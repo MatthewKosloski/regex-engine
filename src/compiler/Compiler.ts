@@ -150,7 +150,7 @@ class Compiler {
      * a new NFA to accept the language L(a) U L(b).
      *
      * @private 
-     * @param m1 The first nFA.
+     * @param m1 The first NFA.
      * @param m2 The second NFA.
      * @returns A new NFA to accept the union of the languages accepted by the two NFAs. 
      */
