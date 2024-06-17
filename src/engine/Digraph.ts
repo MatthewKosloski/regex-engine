@@ -4,14 +4,17 @@
  */
 class Digraph {
 
-    private matrix: boolean[][] = [];
+    public readonly matrix: boolean[][];
+    public readonly numVertices: number;
 
     /**
      * Constructs a new directed graph with a provided number of vertices.
      *
-     * @param {number} numVertices The number of vertices in the graph.
+     * @param numVertices The number of vertices in the graph.
      */
     constructor(numVertices: number) {
+        this.numVertices = numVertices;
+        this.matrix = [];
         for (let row = 0; row < numVertices; row++) {
             this.matrix[row] = [];
             for (let col = 0; col < numVertices; col++) {
@@ -23,9 +26,8 @@ class Digraph {
     /**
      * Adds an edge from the source vertex to the target vertex.
      * 
-     * @param {number} source The source vertex. 
-     * @param {number} target The target vertex.
-     * @return {void}
+     * @param source The source vertex. 
+     * @param target The target vertex.
      */
     public addEdge(source: number, target: number): void {
         this.validateVertices(source, target);
@@ -35,9 +37,8 @@ class Digraph {
     /**
      * Removes an edge from the source vertex to the target vertex.
      * 
-     * @param {number} source The source vertex. 
-     * @param {number} target The target vertex.
-     * @return {void}
+     * @param source The source vertex. 
+     * @param target The target vertex.
      */
     public removeEdge(source: number, target: number): void {
         this.validateVertices(source, target);
@@ -47,9 +48,9 @@ class Digraph {
     /**
      * Indicates whether there exists an edge going to target from source.
      * 
-     * @param {number} source The source vertex. 
-     * @param {number} target The target vertex.
-     * @return {boolean} True if there's an edge going to target from source; false otherwise.
+     * @param source The source vertex. 
+     * @param target The target vertex.
+     * @return True if there's an edge going to target from source; false otherwise.
      */
     public hasEdge(source: number, target: number): boolean {
         this.validateVertices(source, target);
@@ -59,8 +60,8 @@ class Digraph {
     /**
      * Returns vertices such that each vertex has an edge going to it from the provided vertex.
      * 
-     * @param {number} vertex A vertex.
-     * @returns {number[]} The vertices that neighbor the given vertex. That is, those vertices that
+     * @param vertex A vertex.
+     * @returns The vertices that neighbor the given vertex. That is, those vertices that
      * have edges going to it from the given vertex.
      */
     public getNeighbors(vertex: number): number[] {
@@ -71,7 +72,7 @@ class Digraph {
 
         return neighbors;
     }
-
+    
     private validateVertices(...vertices: number[]): void {
         vertices.forEach((vertex) => {
             const isValid = vertex >= 0 && vertex <= this.matrix.length - 1;

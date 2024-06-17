@@ -3,13 +3,11 @@ import Token from "../Token";
 export type Parent = Expr | null;
 
 export enum ExprType {
-    Alternation = '|',
-    Character = 'C',
-    Concatenation = '.',
-    Erasure = '',
-    KleeneStar = '*',
-    Parenthesized = '()',
-    Root = 'R',
+    Alternation = 'Alternation',
+    Character = 'Character',
+    KleeneStar = 'Kleene',
+    Parenthesized = 'Parenthesized',
+    Root = 'Root',
 }
 
 /**

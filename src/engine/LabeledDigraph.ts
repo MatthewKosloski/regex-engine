@@ -5,8 +5,8 @@ import Digraph from './Digraph';
  */
 class LabeledDigraph extends Digraph {
 
-    private vertexLabels: string[] = [];
-    private edgeLabels: string[] = [];
+    public readonly vertexLabels: string[] = [];
+    public readonly edgeLabels: string[][] = [];
 
     /**
      * Constructs a new labeled directed graph.
@@ -16,20 +16,29 @@ class LabeledDigraph extends Digraph {
     constructor(vertices: string[]) {
         super(vertices.length);
         this.vertexLabels = vertices;
+
+        for (let row = 0; row < vertices.length; row++) {
+            this.edgeLabels[row] = [];
+            for (let col = 0; col < vertices.length; col++) {
+                this.edgeLabels[row][col] = null;
+            }
+        }
     }
 
     /**
+     * Adds a labeled edge from the source vertex to the target vertex.
      * 
-     * @param {string} source 
-     * @param {string} target 
-     * @param {string} label 
+     * @param {string} source The source vertex.
+     * @param {string} target The target vertex.
+     * @param {string} label The label of the edge from the source to the target.
      */
-    // addLabeledEdge(source: string, target: string, label: string): void {
-    //     this.addEdge(this.getVertexIndex(source), this.getVertexIndex(target));
+    public addLabeledEdge(source: string, target: string, label: string): void {
+        const sourceVertex = this.toIndex(source);
+        const targetVertex = this.toIndex(target);
 
-    //     const sourceEdgeLabels = this.edgeLabels[source] ?? [];
-    //     sourceEdgeLabels[target] = label;
-    // }
+        this.addEdge(sourceVertex, targetVertex);
+        this.edgeLabels[sourceVertex][targetVertex] = label;
+    }
 
     /**
      * 
@@ -37,7 +46,7 @@ class LabeledDigraph extends Digraph {
      * @param {string} target 
      */
     public removeLabeledEdge(source: string, target: string): void {
-        this.removeEdge(this.getVertexIndex(source), this.getVertexIndex(target));
+        this.removeEdge(this.toIndex(source), this.toIndex(target));
     }
 
     /**
@@ -47,25 +56,14 @@ class LabeledDigraph extends Digraph {
      * @return {boolean}
      */
     public hasLabeledEdge(source: string, target: string): boolean {
-        return this.hasEdge(this.getVertexIndex(source), this.getVertexIndex(target));
+        return this.hasEdge(this.toIndex(source), this.toIndex(target));
     }
 
-    /**
-     * 
-     * @param {string} source 
-     * @param {string} target 
-     * @return {number[]}
-     */
-    // getLabeledNeighbors(source: string, target: string): number[] {
-    //     return this.getNeighbors(this.getVertexIndex(source), this.getVertexIndex(target));
-    // }
+    public getLabeledNeighbors(vertex: string): number[] {
+        return this.getNeighbors(this.toIndex(vertex));
+    }
 
-    /**
-     * Get the index of the vertex with the provided label.
-     * 
-     * @param {string} label 
-     */
-    public getVertexIndex(label: string): number {
+    public toIndex(label: string): number {
         const index = this.vertexLabels.indexOf(label);
 
         if (index === -1) {
@@ -73,6 +71,16 @@ class LabeledDigraph extends Digraph {
         }
 
         return index;
+    }
+
+    public toLabel(index: number): string {
+        const label = this.vertexLabels[index];
+
+        if (label === undefined) {
+            throw new Error(`No vertex found with index ${index}.`);
+        }
+
+        return label;
     }
 
 }

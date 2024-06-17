@@ -4,7 +4,7 @@ import {
     Expr,
     KleeneStarExpr,
     ParenthesizedExpr
-} from './expressions';
+} from 'parser/expressions';
 import { TokenType } from './Token';
 import Parser from './Parser';
 

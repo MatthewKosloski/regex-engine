@@ -5,18 +5,32 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "tsx",
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
             "program": "${workspaceFolder}\\program.ts",
+            "skipFiles": [
+                "<node_internals>/**",
+                "${workspaceFolder}/node_modules/**"
+            ],
             "outFiles": [
                 "${workspaceFolder}/build/*.js",
                 "!**/node_modules/**"
-            ]
+            ],
+            "runtimeExecutable": "tsx",
+        },
+        {
+            "name": "Debug",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "skipFiles": [
+                // Node.js internal core modules
+                "<node_internals>/**",
+        
+                // Ignore all dependencies (optional)
+                "${workspaceFolder}/node_modules/**",
+            ],
         }
     ]
 }

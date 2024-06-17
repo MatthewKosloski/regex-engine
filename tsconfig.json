@@ -1,11 +1,19 @@
 {
-    "include": ["./src/**/*.ts", "program.ts"],
+    "include": [
+        "./src/**/*.ts",
+        "program.ts",
+    ],
     "compilerOptions": {
         "outDir": "build",
         "noImplicitAny": true,
         "sourceMap": true,
-        "target": "ES2016",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
+        "target": "ES6",
+        "module": "ESNext",
+        "paths": {
+            "compiler": ["./src/compiler/index"],
+            "engine": ["./src/engine/index"],
+            "parser": ["./src/parser/index"],
+            "parser/expressions": ["./src/parser/expressions/index"],
+        }
     }
 }

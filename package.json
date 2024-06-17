@@ -1,9 +1,12 @@
 {
   "name": "regex-engine",
   "version": "1.0.0",
+  "type": "module",
   "description": "A DFA-driven regular expression engine",
   "main": "program.js",
   "scripts": {
+    "debug": "npx tsx --inspect-brk program.ts",
+    "start": "npx tsx program.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc"
   },
@@ -11,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "tsx": "^4.12.0",
     "typescript": "^5.2.2"
   }
 }

@@ -1,4 +1,4 @@
-import {Expr, RootExpr} from './expressions';
+import {Expr, RootExpr} from './expressions/index';
 import Lexer from './Lexer';
 import Token, {TokenType} from './Token';
 
