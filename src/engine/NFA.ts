@@ -81,6 +81,16 @@ class NFA extends LabeledDigraph {
         return this;
     }
 
+    public addAcceptingState(state: string): NFA {
+        this.acceptingStates.add(state);
+        return this;
+    }
+
+    public removeAcceptingState(state: string): NFA {
+        this.acceptingStates.delete(state);
+        return this;
+    }
+
     public clone(): NFA {
 
         const clonedStates = new Set<string>();

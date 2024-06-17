@@ -58,15 +58,18 @@ class Compiler {
         // return this.minimizeDFA(this.nfaToDFA(this.regexToNFA(ast)));
     }
 
-    private astToNfa(ast: Expr): void {
+    private astToNfa(ast: Expr): NFA {
         const nfas: NFA[] = [];
 
+        // For each regular expression, build an NFA.
         ast.children.forEach((expr) => {
             nfas.push(this.regexToNfa(expr));
         });
 
-        // Concat.
-        const f = 1;
+        // Combine all NFAs into a single NFA.
+        const nfa = nfas.reduce((m1, m2) => this.concatenate(m1, m2));
+
+        return nfa;
     }
 
     /**
@@ -146,8 +149,8 @@ class Compiler {
     }
 
     /** 
-     * Let L(a) and L(b) be the languages accepted by m1 and m2, respectively. Constructs
-     * a new NFA to accept the language L(a) U L(b).
+     * Let a and b be some regular expressions. Let L(a) and L(b) be the languages accepted
+     * by m1 and m2, respectively. Constructs a new NFA to accept the language L(a) U L(b).
      *
      * @private 
      * @param m1 The first NFA.
@@ -188,6 +191,55 @@ class Compiler {
         return m3;
     }
 
+    /** 
+     * Let a and b be some regular expressions. Let L(a) and L(b) be the languages accepted
+     * by m1 and m2, respectively. Constructs a new NFA to accept the language L(a)L(b).
+     *
+     * @private 
+     * @param m1 The first NFA.
+     * @param m2 The second NFA.
+     * @returns A new NFA to accept the union of the languages accepted by the two NFAs. 
+     */
+    private concatenate(m1: NFA, m2: NFA): NFA {
+        // Clone m1 so we can modify it without altering m1 directly.
+        const m1Clone = m1.clone();
+
+        /*
+         * Connect, via epsilon-transitions, every accepting state of m1
+         * to the start state of m2. Make this accepting state of m1
+         * a non-accepting state. 
+         */
+        m1Clone.acceptingStates.forEach((acceptingState) => {
+            m1Clone.addEpsilonTransition({
+                sourceState: acceptingState,
+                /**
+                 * TODO: m1Clone doesn't know about the m2 states, therefore,
+                 * we can't transition to a state of m2.
+                 */
+                targetState: m2.startState,
+            });
+            m1Clone.removeAcceptingState(acceptingState);
+        });
+        
+
+        // Instantiate a new NFA to accept L(a)L(b).
+        const m3 = new NFA({
+            states: new Set([
+                ...m1Clone.states,
+                ...m2.states,
+            ]),
+            alphabet: this.alphabet,
+            // The start state of m3 will be the start state of m1.
+            startState: m1Clone.startState,
+            // The accepting states of m3 will be the accepting states of m2.
+            acceptingStates: new Set(...m2.acceptingStates)
+        });
+
+        m3.addTransitions(m1.transitions)
+            .addTransitions(m2.transitions);
+
+        return m3;
+    }
 
     private getState(): string {
         return `q${this.states++}`;
