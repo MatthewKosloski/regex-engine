@@ -11,6 +11,8 @@ type Transition = {
  */
 class NFA extends LabeledDigraph {
 
+    // TODO: Remove the alphabet from the NFA to reduce memory footprint. Each
+    // NFA will have the same alphabet.
     public readonly alphabet: Set<string>;
     public readonly startState: string;
     public readonly acceptingStates: Set<string>;
