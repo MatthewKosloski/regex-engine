@@ -201,42 +201,32 @@ class Compiler {
      * @returns A new NFA to accept the union of the languages accepted by the two NFAs. 
      */
     private concatenate(m1: NFA, m2: NFA): NFA {
-        // Clone m1 so we can modify it without altering m1 directly.
-        const m1Clone = m1.clone();
-
-        /*
-         * Connect, via epsilon-transitions, every accepting state of m1
-         * to the start state of m2. Make this accepting state of m1
-         * a non-accepting state. 
-         */
-        m1Clone.acceptingStates.forEach((acceptingState) => {
-            m1Clone.addEpsilonTransition({
-                sourceState: acceptingState,
-                /**
-                 * TODO: m1Clone doesn't know about the m2 states, therefore,
-                 * we can't transition to a state of m2.
-                 */
-                targetState: m2.startState,
-            });
-            m1Clone.removeAcceptingState(acceptingState);
-        });
-        
-
         // Instantiate a new NFA to accept L(a)L(b).
         const m3 = new NFA({
             states: new Set([
-                ...m1Clone.states,
+                ...m1.states,
                 ...m2.states,
             ]),
             alphabet: this.alphabet,
             // The start state of m3 will be the start state of m1.
-            startState: m1Clone.startState,
+            startState: m1.startState,
             // The accepting states of m3 will be the accepting states of m2.
-            acceptingStates: new Set(...m2.acceptingStates)
+            acceptingStates: new Set([...m2.acceptingStates])
         });
 
         m3.addTransitions(m1.transitions)
             .addTransitions(m2.transitions);
+
+        /*
+         * Connect, via epsilon-transitions, every accepting state of m1
+         * to the start state of m2.
+         */
+        m1.acceptingStates.forEach((acceptingState) => {
+            m3.addEpsilonTransition({
+                sourceState: acceptingState,
+                targetState: m2.startState,
+            });
+        });
 
         return m3;
     }
