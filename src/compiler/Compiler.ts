@@ -190,7 +190,7 @@ class Compiler {
     }
 
     private parenthesizedRegexToNfa(regex: Expr): NFA {
-        return null;
+        return this.astToNfa(regex);
     }
 
     /** 
