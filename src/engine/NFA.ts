@@ -11,9 +11,30 @@ type Transition = {
  */
 class NFA extends LabeledDigraph {
 
-    // TODO: Remove the alphabet from the NFA to reduce memory footprint. Each
-    // NFA will have the same alphabet.
-    public readonly alphabet: Set<string>;
+    public static alphabet = new Set([
+        // lowercase
+        ...[
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        ],
+
+        // uppercase
+        ...[
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        ],
+
+        // digits
+        ...[
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        ],
+
+        // special
+        ...[
+            '_',
+        ]
+    ]);
+
     public readonly startState: string;
     public readonly acceptingStates: Set<string>;
     public readonly states: Set<string>;
@@ -25,14 +46,12 @@ class NFA extends LabeledDigraph {
      */
     constructor(args: {
         states: Set<string>,
-        alphabet: Set<string>,
         startState: string,
         acceptingStates: Set<string>
     }) {
         super([...args.states.values()]);
-        const { states, alphabet, startState, acceptingStates } = args;
+        const { states, startState, acceptingStates } = args;
         this.states = states;
-        this.alphabet = alphabet;
         this.startState = startState;
         this.acceptingStates = acceptingStates;
     }
@@ -96,9 +115,6 @@ class NFA extends LabeledDigraph {
         const clonedStates = new Set<string>();
         this.states.forEach((state) => clonedStates.add(state));
 
-        const clonedAlphabet = new Set<string>();
-        this.alphabet.forEach((symbol) => clonedAlphabet.add(symbol));
-
         const clonedStartState = this.startState;
 
         const clonedAcceptingStates = new Set<string>();
@@ -106,7 +122,6 @@ class NFA extends LabeledDigraph {
 
         const clone = new NFA({
             states: clonedStates,
-            alphabet: clonedAlphabet,
             startState: clonedStartState,
             acceptingStates: clonedAcceptingStates
         });

@@ -7,36 +7,12 @@ import { Expr, ExprType } from 'parser/expressions';
  */
 class AstToNfaConverter {
 
-    private readonly alphabet: Set<string>;
     private readonly ast: Expr;
     private numStates: number;
 
     constructor(ast: Expr) {
-        this.alphabet = this.getAlphabet();
         this.ast = ast;
         this.numStates = 0;
-    }
-
-    private getAlphabet(): Set<string> {
-        const lower = [
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        ];
-
-        const upper = [
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        ];
-
-        const digits = [
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        ];
-
-        const special = [
-            '_',
-        ];
-
-        return new Set([...lower, ...upper, ...digits, ...special]);
     }
 
     public convert(): NFA {
@@ -105,7 +81,6 @@ class AstToNfaConverter {
          */
         const nfa = new NFA({
             states: new Set([startState, acceptingState]),
-            alphabet: this.alphabet,
             startState: startState,
             acceptingStates: new Set([acceptingState])
         });
@@ -143,7 +118,6 @@ class AstToNfaConverter {
                 ...child.states,
                 startState,
             ]),
-            alphabet: this.alphabet,
             startState: startState,
             acceptingStates: new Set([startState])
         });
@@ -198,7 +172,6 @@ class AstToNfaConverter {
                 startState,
                 acceptingState
             ]),
-            alphabet: this.alphabet,
             startState: startState,
             acceptingStates: new Set([acceptingState])
         });
@@ -237,7 +210,6 @@ class AstToNfaConverter {
                 ...m1.states,
                 ...m2.states,
             ]),
-            alphabet: this.alphabet,
             // The start state of m3 will be the start state of m1.
             startState: m1.startState,
             // The accepting states of m3 will be the accepting states of m2.
