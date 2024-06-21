@@ -67,15 +67,11 @@ class AstToNfaConverter {
      * @return The equivalent NFA.
      */
     private regexToNfa(regex: Expr): NFA {
-        // TODO:
-        // Uses Thompson's construction algorithm.
-
-        // Perform a post-order traversal through the AST to build the NFA.
-        // return new NFA( ... );
-
-        // Recursively build an NFA for each expression based
-        // on the expression type.
-
+        /**
+         * Thompson's construction algorithm:
+         * Recursively build an NFA for each expression based
+         * on the expression type.
+         */
         switch (regex.type) {
             case ExprType.Alternation:
                 return this.alternationRegexToNfa(regex);
