@@ -7,18 +7,44 @@ import { Expr, ExprType } from 'parser/expressions';
  */
 class AstToNfaConverter {
 
+    /**
+     * A reference to the root node of the AST of the regular expression
+     * that is to be converted to an NFA.
+     */
     private readonly ast: Expr;
+
+    /**
+     * The number of states in the NFA.
+     */
     private numStates: number;
 
+    /**
+     * Constructs a new NFA converter for the given AST.
+     * 
+     * @param ast The root node of the AST that is to be converted. 
+     */
     constructor(ast: Expr) {
         this.ast = ast;
         this.numStates = 0;
     }
 
+    /**
+     * Convert the AST to an NFA.
+     * 
+     * @returns The NFA. 
+     */
     public convert(): NFA {
         return this.astToNfa(this.ast);
     }
 
+    /**
+     * For each child of the AST, constructs an NFA. Then, 
+     * combine all NFAs into a single one.
+     * 
+     * @private
+     * @param ast The AST that is to be converted to an NFA.
+     * @returns The resulting NFA.
+     */
     private astToNfa(ast: Expr): NFA {
         const nfas: NFA[] = [];
 
@@ -34,10 +60,11 @@ class AstToNfaConverter {
     }
 
     /**
-     * Converts a given regular expression to a non-deterministic finite state machine.
+     * Converts a given regex to an NFA.
      * 
+     * @private
      * @param regex The regular expression to be converted to a NFA.
-     * @return The equivalent finite state machine.
+     * @return The equivalent NFA.
      */
     private regexToNfa(regex: Expr): NFA {
         // TODO:
@@ -66,6 +93,7 @@ class AstToNfaConverter {
     /**
      * Builds an NFA for a single character regular expression.
      * 
+     * @private
      * @param regex The single character regular expression. 
      * @returns The equivalent NFA.
      */
@@ -94,6 +122,14 @@ class AstToNfaConverter {
         return nfa;
     }
 
+    /**
+     * Builds an NFA for a regular expression of the form a|b,
+     * where a and b are two regular expressions.
+     * 
+     * @private
+     * @param regex The regular expression.
+     * @returns The NFA.
+     */
     private alternationRegexToNfa(regex: Expr): NFA {
         const left = this.regexToNfa(regex.first);
         const right = this.regexToNfa(regex.second);
@@ -148,6 +184,14 @@ class AstToNfaConverter {
         return nfa;
     }
 
+    /**
+     * Builds an NFA for a regular expression of the form (a),
+     * where a is a regular expression.
+     * 
+     * @private
+     * @param regex The regular expression. 
+     * @returns The NFA.
+     */
     private parenthesizedRegexToNfa(regex: Expr): NFA {
         return this.astToNfa(regex);
     }
@@ -233,6 +277,12 @@ class AstToNfaConverter {
         return m3;
     }
 
+    /**
+     * Gets a new state name.
+     * 
+     * @private
+     * @returns The name of the state. 
+     */
     private getState(): string {
         return `q${this.numStates++}`;
     }
