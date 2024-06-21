@@ -140,8 +140,53 @@ class Compiler {
         return this.unionize(left, right);
     }
 
+    /**
+     * Let a be a regular expression that describes the language L(a).
+     * Creates an NFA to accept the language L(a*).
+     * 
+     * @private
+     * @param regex A regular expression that describes the language L(a).
+     * @returns An NFA that accepts the language L(a*).
+     */
     private kleeneStarRegexToNfa(regex: Expr): NFA {
-        return null;
+        const child = this.regexToNfa(regex.first);
+
+        const startState = this.getState();
+
+        const nfa = new NFA({
+            states: new Set([
+                ...child.states,
+                startState,
+            ]),
+            alphabet: this.alphabet,
+            startState: startState,
+            acceptingStates: new Set([startState])
+        });
+
+        nfa.addTransitions(child.transitions);
+
+        /**
+         * Connect, via epsilon-transition, the start state
+         * to the start state of the child NFA.
+         */
+        nfa.addEpsilonTransition({
+            sourceState: startState,
+            targetState: child.startState,
+        });
+
+        /**
+         * Create epsilon-transitions from each of the child NFA's
+         * accepting states to the start state.
+         */
+        child.acceptingStates.forEach((acceptingState) => {
+            nfa.addEpsilonTransition({
+                sourceState: acceptingState,
+                targetState: startState,
+            });
+        });
+
+
+        return nfa;
     }
 
     private parenthesizedRegexToNfa(regex: Expr): NFA {
