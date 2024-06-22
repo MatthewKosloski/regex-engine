@@ -7,7 +7,7 @@ export type Transition = {
 }
 
 /**
- * A nondeterministic finite automaton.
+ * A non-deterministic finite automaton, or NFA.
  */
 class NFA extends LabeledDigraph {
 
