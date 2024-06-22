@@ -7,13 +7,14 @@
         "outDir": "build",
         "noImplicitAny": true,
         "sourceMap": true,
-        "target": "ES6",
+        "target": "ES2017",
         "module": "ESNext",
         "paths": {
             "compiler": ["./src/compiler/index"],
             "engine": ["./src/engine/index"],
             "parser": ["./src/parser/index"],
             "parser/expressions": ["./src/parser/expressions/index"],
+            "utils": ["./src/utils/index"],
         }
     }
 }
