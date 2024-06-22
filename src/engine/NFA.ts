@@ -1,6 +1,6 @@
 import LabeledDigraph from './LabeledDigraph';
 
-type Transition = {
+export type Transition = {
     sourceState: string;
     targetState: string;
     symbol: string;
