@@ -1,5 +1,7 @@
 import { Parser } from 'parser';
 import AstToNfaConverter from './AstToNfaConverter';
+import NfaToDfaConverter from './NfaToDfaConverter';
+import DFA from '../engine/DFA';
 
 /**
  * Compiles a regular expression string to a deterministic finite automaton.
@@ -16,46 +18,20 @@ class Compiler {
     constructor(regex: string) {
         this.regex = regex;
     }
+
     /**
      * Compile the regular expression.
      * 
      * @return An optimized, deterministic finite automaton that's equivalent
      * to the regular expression.
      */
-    public compile(): void {
+    public compile(): DFA {
         const ast = new Parser(this.regex).parse();
         const nfa = new AstToNfaConverter(ast).convert();
+        const dfa = new NfaToDfaConverter(nfa).convert();
 
-        // TODO:
-        // return this.minimizeDFA(this.nfaToDFA(this.regexToNFA(ast)));
+        return dfa;
     }
-
-    /**
-     * Given a non-deterministic finite automaton, construct an equivalent deterministic
-     * finite automaton.
-     * 
-     * @param nfa The NFA that is to be converted to a DFA.
-     * @return The equivalent DFA.
-     */
-    //private nfaToDFA(nfa: NFA): void {
-        // TODO:
-        // Uses the subset construction algorithm.
-        // return new DFA( ... );
-    //};
-
-    /**
-     * Given a deterministic finite automaton, construct an equivalent deterministic
-     * finite automaton that is optimized for computation.
-     * 
-     * @param dfa The DFA that is to be optimized.
-     * @return A minimized/optimized version of the given DFA.
-     */
-    // private minimizeDFA(dfa: null) {
-        // TODO:
-        // Uses Moore's algorithm.
-        // return new DFA( ... );
-    //};
-
 }
 
 export default Compiler;
