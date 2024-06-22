@@ -110,6 +110,19 @@ class NFA extends LabeledDigraph {
         return this;
     }
 
+    /**
+     * Indicates whether there exists a transition with the provided label
+     * originating from the provided state.
+     * 
+     * @param state The name of an NFA state.
+     * @param label A character in the alphabet.
+     * @returns True if there exists at least one transition leaving the provided
+     * state with the provided label; false otherwise.
+     */
+    public hasOutgoingTransition(state: string, label: string): boolean {
+        return this.edgeLabels[this.toIndex(state)]?.indexOf(label) !== -1;
+    }
+
     public clone(): NFA {
 
         const clonedStates = new Set<string>();
